@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 align="center">Links</h1>
+<div class="row container-fluid" id="notes">
+  {% for note in notes %}
+  <li class="list-group-item">
+    <p><b>#{{ note.id }}</b></p>
+    <p>User: {{ note.user_id }}</p>
+    <p><b>Title: {{ note.title }}</b></p>
+    <p>URL: {{ note.url }}</p>
+    <p>Frequency: {{ note.frequency}}</p>
+    <p>Month: {{ note.month}}</p>
+    <p>Days: {{ note.days}}</p>
+  </li>
+  {% endfor %}
+</div>
+<h1 align="center">Users</h1>
+<div class="row container-fluid" id="notes">
+  {% for user in users %}
+  <li class="list-group-item">
+    <p><b>#{{ user.id }}</b></p>
+    <p>Email: {{ user.email }}</p>
+    <p>Pass: {{ user.password }}</p>
+  </li>
+  {% endfor %}
+</div>
+{% endblock %}

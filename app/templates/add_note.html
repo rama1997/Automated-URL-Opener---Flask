@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 align="center">Add New Link</h1>
+<form method="POST">
+  <label for="title">Title:</label>
+  <input type="text" id="title" name="title" class="form-control">
+  <br />
+  <label for="url">URL:</label>
+  <input type="url" id="url" name="url" class="form-control">
+  <br />
+  <label for="frequency">Frequency:</label>
+  <select name="frequency" id="frequency">
+    <option value="" disabled selected>Select frequency</option>
+  </select>
+  <div id="days_div" hidden>
+    <label for="days">Day:</label>
+    <select name="days" id="days">
+      <option value="" disabled selected>Select Day</option>
+    </select>
+  </div>
+  <br />
+  <div id="month_div" hidden>
+    <label for="month">Month:</label>
+    <select name="month" id="month">
+      <option value="" disabled selected>Select Month</option>
+    </select>
+  </div>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add</button>
+  </div>
+</form>
+
+
+<script>
+var frequency = ["Daily", "Weekly", "Monthly"]
+var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+window.onload = function() {
+  var frequencySel = document.getElementById("frequency");
+  var days_div = document.getElementById("days_div");
+  var daysSel = document.getElementById("days");
+  var month_div = document.getElementById("month_div");
+  var month_Sel = document.getElementById("month");
+
+  for (var i = 0; i < frequency.length; i++) {
+    frequencySel.options[frequencySel.options.length] = new Option(frequency[i], frequency[i]);
+  }
+  frequencySel.onchange = function() {
+    //empty other dropdowns
+    daysSel.length = 1;
+    month_Sel.length = 1;
+    //display correct values
+    if (this.value == "Daily"){
+      days_div.setAttribute("hidden", true);
+      month_div.setAttribute("hidden", true);
+    }
+    else if(this.value == "Weekly"){
+      days_div.removeAttribute("hidden");
+      month_div.setAttribute("hidden", true);
+      for (var i = 0; i < days.length; i++) {
+        daysSel.options[daysSel.options.length] = new Option(days[i], days[i]);
+      }
+    }
+    else if(this.value == "Monthly") {
+      days_div.setAttribute("hidden", true);
+      months_div.setAttribute("hidden", true);
+    }
+  }
+}
+</script>
+{% endblock %}

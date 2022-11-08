@@ -1,0 +1,41 @@
+Opening URL...
+/Users/ray/flask-tutorial
+Opened https://www.reddit.com/r/kpop/
+Done!
+2022-11-02 23:11:02.082083 Opening URL...
+2022-11-02 23:11:02.626976 Opened https://www.reddit.com/r/kpop/
+2022-11-02 23:11:02.627051 Done!
+Traceback (most recent call last):
+  File "/Users/ray/flask-tutorial/venv/bin/flask", line 8, in <module>
+    sys.exit(main())
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/flask/cli.py", line 1047, in main
+    cli.main()
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 1055, in main
+    rv = self.invoke(ctx)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 1657, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 1404, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/decorators.py", line 26, in new_func
+    return f(get_current_context(), *args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/flask/cli.py", line 357, in decorator
+    return __ctx.invoke(f, *args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/decorators.py", line 26, in new_func
+    return f(get_current_context(), *args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/flask/cli.py", line 357, in decorator
+    return __ctx.invoke(f, *args, **kwargs)
+  File "/Users/ray/flask-tutorial/venv/lib/python3.9/site-packages/click/core.py", line 760, in invoke
+    return __callback(*args, **kwargs)
+  File "/Users/ray/flask-tutorial/app/cli.py", line 18, in schedule
+    print(str(datetime.pstnow()),'Opening URL...')
+AttributeError: type object 'datetime.datetime' has no attribute 'pstnow'
+2022-11-02 16:19:02.275975 Opening URL...
+2022-11-02 16:19:02.958343 Opened https://www.reddit.com/r/kpop/
+2022-11-02 16:19:02.958418 Done!
+2022-11-03 16:19:01.233143 Opening URL...
+2022-11-03 16:19:01.865559 Opened https://www.reddit.com/r/kpop/
+2022-11-03 16:19:01.865643 Done!
