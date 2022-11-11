@@ -11,10 +11,18 @@
 	{% if note.frequency == "Weekly" %}
 	<p>Day: {{note.dow}}</p>
 	{% elif note.frequency == "Daily" %}
-	<p>Day to open: Everyday </p>
+	<p>Day: Everyday </p>
 	{% elif note.frequency == "Monthly" %}
 	<p>Date: {{note.date}}</p>
 	{% endif %}
+	<p>
+		Time:
+		{% if note.hour == "0" %}
+		12:{{note.minute}} {{note.am_pm}}
+		{% else %}
+		{{note.hour}}:{{note.minute}} {{note.am_pm}}
+		{% endif %}
+	</p>
 	<a href="/edit_note?note={{note.id}}" class="btn btn-info">Edit</a>
 	<button type="button" class="btn btn-danger" onClick="deleteNote({{ note.id }})">
 	  <span aria-hidden="true">Delete</span>

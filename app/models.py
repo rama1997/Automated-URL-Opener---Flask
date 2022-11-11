@@ -11,6 +11,9 @@ class Note(db.Model):
     dow = db.Column(db.String(100))
     month = db.Column(db.String(100))
     date = db.Column(db.String(100))
+    hour = db.Column(db.String(100))
+    minute = db.Column(db.String(100))
+    am_pm = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 

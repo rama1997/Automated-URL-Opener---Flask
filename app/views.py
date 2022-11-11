@@ -21,16 +21,19 @@ def add_note():
 		dow = request.form.get('dow')
 		month = request.form.get('month')
 		date = request.form.get('date')
+		hour = request.form.get('hour')
+		minute = request.form.get('minute')
+		am_pm = request.form.get('am_pm')
 
 		if len(title) < 1:
 			flash('Title is too short!', category='error')
 		else:
-			new_note = Note(url=url, title=title, frequency = frequency, dow = dow, month = month, date = date, user_id=current_user.id)
+			new_note = Note(url=url, title=title, frequency = frequency, dow = dow, month = month, date = date, hour = hour, minute = minute, am_pm = am_pm, user_id=current_user.id)
 			db.session.add(new_note)
 			db.session.flush()
 			cron.schedule([new_note])
 			db.session.commit()
-			flash('Note added!', category='success')
+			flash('Link added!', category='success')
 
 	return render_template("add_note.html", user=current_user)
 
@@ -73,6 +76,9 @@ def edit_note():
 		dow = request.form.get('dow')
 		month = request.form.get('month')
 		date = request.form.get('date')
+		hour = request.form.get('hour')
+		minute = request.form.get('minute')
+		am_pm = request.form.get('am_pm')
 		note_id = request.form.get('note_id')
 		note = Note.query.get(note_id)
 		if note and note.user_id == current_user.id:
@@ -85,6 +91,9 @@ def edit_note():
 				note.dow = dow
 				note.month = month
 				note.date = date
+				note.hour = hour
+				note.minute = minute
+				note.am_pm = am_pm
 				db.session.flush()
 				cron.modify(note)
 				db.session.commit()

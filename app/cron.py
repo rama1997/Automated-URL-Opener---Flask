@@ -29,7 +29,12 @@ def schedule(notes):
 				job.day.on(1)
 			else:
 				job.day.on(int(note.date))
-		job.hour.on(13)
+
+		job.minute.on(int(note.minute))
+		if note.am_pm == "AM":
+			job.hour.on(int(note.hour))
+		else:
+			job.hour.on(int(note.hour)+12)
 
 	cron.write()
 
@@ -70,7 +75,13 @@ def modify(note):
 				job.day.on(1)
 			else:
 				job.day.on(int(note.date))
-		job.hour.on(13)
+
+		job.minute.on(int(note.minute))
+		if note.am_pm == "AM":
+			job.hour.on(int(note.hour))
+		else:
+			job.hour.on(int(note.hour)+12)
+
 	cron.write()
 
 def get_jobs():
