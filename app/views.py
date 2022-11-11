@@ -18,13 +18,14 @@ def add_note():
 		url = request.form.get('url')
 		title = request.form.get('title')
 		frequency = request.form.get('frequency')
-		days = request.form.get('days')
+		dow = request.form.get('dow')
 		month = request.form.get('month')
+		date = request.form.get('date')
 
 		if len(title) < 1:
 			flash('Title is too short!', category='error')
 		else:
-			new_note = Note(url=url, title=title, frequency = frequency, days = days, month = month, user_id=current_user.id)
+			new_note = Note(url=url, title=title, frequency = frequency, dow = dow, month = month, date = date, user_id=current_user.id)
 			db.session.add(new_note)
 			db.session.flush()
 			cron.schedule([new_note])
@@ -69,8 +70,9 @@ def edit_note():
 		url = request.form.get('url')
 		title = request.form.get('title')
 		frequency = request.form.get('frequency')
-		days = request.form.get('days')
+		dow = request.form.get('dow')
 		month = request.form.get('month')
+		date = request.form.get('date')
 		note_id = request.form.get('note_id')
 		note = Note.query.get(note_id)
 		if note and note.user_id == current_user.id:
@@ -80,8 +82,9 @@ def edit_note():
 				note.url = url
 				note.title = title
 				note.frequency = frequency
-				note.days = days
+				note.dow = dow
 				note.month = month
+				note.date = date
 				db.session.flush()
 				cron.modify(note)
 				db.session.commit()

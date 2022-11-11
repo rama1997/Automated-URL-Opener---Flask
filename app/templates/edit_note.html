@@ -12,9 +12,9 @@
   <select name="frequency" id="frequency">
     <option value="" disabled>Select frequency</option>
   </select>
-  <div id="days_div" hidden>
-    <label for="days">Day:</label>
-    <select name="days" id="days">
+  <div id="dow_div" hidden>
+    <label for="dow">Day of the Week:</label>
+    <select name="dow" id="dow">
       <option value="" disabled selected>Select Day</option>
     </select>
   </div>
@@ -23,6 +23,12 @@
     <label for="month">Month:</label>
     <select name="month" id="month">
       <option value="" disabled selected>Select Month</option>
+    </select>
+  </div>
+  <div id="date_div" hidden>
+    <label for="date">Date:</label>
+    <select name="date" id="date">
+      <option value="" disabled selected>Select Date</option>
     </select>
   </div>
   <br />
@@ -34,14 +40,16 @@
 
 <script>
 var frequency = ["Daily", "Weekly", "Monthly"]
-var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+var dow = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 window.onload = function() {
   var frequencySel = document.getElementById("frequency");
-  var days_div = document.getElementById("days_div");
-  var daysSel = document.getElementById("days");
+  var dow_div = document.getElementById("dow_div");
+  var dow_Sel = document.getElementById("dow");
   var month_div = document.getElementById("month_div");
   var month_Sel = document.getElementById("month");
+  var date_div = document.getElementById("date_div");
+  var date_Sel = document.getElementById("date");
 
   for (var i = 0; i < frequency.length; i++) {
     frequencySel.options[frequencySel.options.length] = new Option(frequency[i], frequency[i]);
@@ -50,48 +58,83 @@ window.onload = function() {
     }
   }
   //empty other dropdowns
-  daysSel.length = 1;
+  dow_Sel.length = 1;
   month_Sel.length = 1;
+  date_Sel.length = 1;
   //display correct values
   if ("{{note.frequency}}" == "Daily"){
-      days_div.setAttribute("hidden", true);
+      dow_div.setAttribute("hidden", true);
       month_div.setAttribute("hidden", true);
+      date_div.setAttribute("hidden", true);
   }
   else if("{{note.frequency}}" == "Weekly"){
     month_div.setAttribute("hidden", true);
-    days_div.removeAttribute("hidden");
-    for (var i = 0; i < days.length; i++) {
-      daysSel.options[daysSel.options.length] = new Option(days[i], days[i]);
-      if (daysSel.options[daysSel.options.length-1].value == "{{note.days}}"){
-        daysSel.options[daysSel.options.length-1].selected = true;
+    dow_div.removeAttribute("hidden");
+    date_div.setAttribute("hidden", true);
+    for (var i = 0; i < dow.length; i++) {
+      dow_Sel.options[dow_Sel.options.length] = new Option(dow[i], dow[i]);
+      if (dow_Sel.options[dow_Sel.options.length-1].value == "{{note.dow}}"){
+        dow_Sel.options[dow_Sel.options.length-1].selected = true;
       }
     }
   }
   else if("{{note.frequency}}" == "Monthly") {
     month_div.setAttribute("hidden", true);
-    days_div.setAttribute("hidden", true);
+    dow_div.setAttribute("hidden", true);
+    date_div.removeAttribute("hidden");
+    date_Sel.options[date_Sel.options.length] = new Option("Start of Month", "Start of Month");
+    if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+      date_Sel.options[date_Sel.options.length-1].selected = true;
+    }
+    date_Sel.options[date_Sel.options.length] = new Option("End of Month", "End of Month");
+    if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+      date_Sel.options[date_Sel.options.length-1].selected = true;
+    }
+    for (var i = 1; i < 32; i++) {
+      date_Sel.options[date_Sel.options.length] = new Option(i, i);
+      if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+        date_Sel.options[date_Sel.options.length-1].selected = true;
+      }
+    }
   }
   frequencySel.onchange = function() {
     //empty days dropdowns
-    daysSel.length = 1;
+    dow_Sel.length = 1;
     //display correct values
     if (this.value == "Daily"){
-      days_div.setAttribute("hidden", true);
+      dow_div.setAttribute("hidden", true);
       month_div.setAttribute("hidden", true);
+      date_div.setAttribute("hidden", true);
     }
     else if(this.value == "Weekly"){
       month_div.setAttribute("hidden", true);
-      days_div.removeAttribute("hidden");
-      for (var i = 0; i < days.length; i++) {
-        daysSel.options[daysSel.options.length] = new Option(days[i], days[i]);
-        if (daysSel.options[daysSel.options.length-1].value == "{{note.days}}"){
-          daysSel.options[daysSel.options.length-1].selected = true;
+      dow_div.removeAttribute("hidden");
+      date_div.setAttribute("hidden", true);
+      for (var i = 0; i < dow.length; i++) {
+        dow_Sel.options[dow_Sel.options.length] = new Option(dow[i], dow[i]);
+        if (dow_Sel.options[dow_Sel.options.length-1].value == "{{note.dow}}"){
+          dow_Sel.options[dow_Sel.options.length-1].selected = true;
         }
       }
     }
     else if(this.value == "Monthly") {
-      days_div.setAttribute("hidden", true);
+      dow_div.setAttribute("hidden", true);
       month_div.setAttribute("hidden", true);
+      date_div.removeAttribute("hidden");
+      date_Sel.options[date_Sel.options.length] = new Option("Start of Month", "Start of Month");
+      if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+        date_Sel.options[date_Sel.options.length-1].selected = true;
+      }
+      date_Sel.options[date_Sel.options.length] = new Option("End of Month", "End of Month");
+      if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+        date_Sel.options[date_Sel.options.length-1].selected = true;
+      }
+      for (var i = 1; i < 32; i++) {
+        date_Sel.options[date_Sel.options.length] = new Option(i, i);
+        if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){
+          date_Sel.options[date_Sel.options.length-1].selected = true;
+        }
+      }
     }
   }
 }

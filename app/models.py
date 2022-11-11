@@ -8,8 +8,9 @@ class Note(db.Model):
     title = db.Column(db.String(100))
     url = db.Column(db.String(10000))
     frequency = db.Column(db.String(100))
-    days = db.Column(db.String(100))
+    dow = db.Column(db.String(100))
     month = db.Column(db.String(100))
+    date = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 

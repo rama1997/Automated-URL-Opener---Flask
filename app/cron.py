@@ -10,22 +10,26 @@ from flask_login import current_user as user
 	0 - monday
 	6 - sunday
 """
-day = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
+cwd = os.getcwd()
+dow = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
 month = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
 
 def schedule(notes):
-	cwd = os.getcwd()
 	for note in notes:
 		job = cron.new(command='cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url), comment=str(note.id))
 		if note.frequency == "Daily":
 			job.every().day()
-			job.hour.on(13)
 		elif note.frequency == "Weekly":
-			job.dow.on(day[note.days])
-			job.hour.on(13)
+			job.dow.on(dow[note.dow])
 		elif note.frequency == "Monthly":
-			job.every().month()
-			job.hour.on(13)
+			if note.date == "End of Month":
+				job.set_command('[ "$(/usr/local/bin/gdate +%d -d tomorrow)" = "01" ] && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
+				job.setall('30 13 28-31 * *')
+			elif note.date == "Start of Month":
+				job.day.on(1)
+			else:
+				job.day.on(int(note.date))
+		job.hour.on(13)
 
 	cron.write()
 
@@ -53,16 +57,20 @@ def modify(note):
 	iter = cron.find_comment(str(note.id))
 	for job in iter:
 		job.clear()
+		job.set_command('cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
 		if note.frequency == "Daily":
 			job.every().day()
-			job.hour.on(13)
 		elif note.frequency == "Weekly":
-			job.dow.on(day[note.days])
-			job.hour.on(13)
+			job.dow.on(dow[note.dow])
 		elif note.frequency == "Monthly":
-			job.every().month()
-			job.hour.on(13)
-		print("after", job)
+			if note.date == "End of Month":
+				job.set_command('[ "$(/usr/local/bin/gdate +%d -d tomorrow)" = "01" ] && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
+				job.setall('30 13 28-31 * *')
+			elif note.date == "Start of Month":
+				job.day.on(1)
+			else:
+				job.day.on(int(note.date))
+		job.hour.on(13)
 	cron.write()
 
 def get_jobs():
