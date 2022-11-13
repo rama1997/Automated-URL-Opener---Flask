@@ -5,13 +5,16 @@ import os
 from .models import Note, User
 from .extensions import db, cron
 from flask_login import current_user as user
+import datetime
 
 """
 	0 - monday
 	6 - sunday
 """
 cwd = os.getcwd()
-dow = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
+current_time = datetime.datetime.now()
+current_week = current_time.strftime("%W")
+dow = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 month = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
 
 def schedule(notes):
@@ -21,6 +24,12 @@ def schedule(notes):
 			job.every().day()
 		elif note.frequency == "Weekly":
 			job.dow.on(dow[note.dow])
+		elif note.frequency == "Biweekly":
+			job.dow.on(dow[note.dow])
+			if int(current_week) % 2 == 1:
+				job.set_command('test $((10#$(/usr/local/bin/gdate +%W)%2)) -eq 1 && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
+			else:
+				job.set_command('test $((10#$(/usr/local/bin/gdate +%W)%2)) -eq 0 && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
 		elif note.frequency == "Monthly":
 			if note.date == "End of Month":
 				job.set_command('[ "$(/usr/local/bin/gdate +%d -d tomorrow)" = "01" ] && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
@@ -67,6 +76,12 @@ def modify(note):
 			job.every().day()
 		elif note.frequency == "Weekly":
 			job.dow.on(dow[note.dow])
+		elif note.frequency == "Biweekly":
+			job.dow.on(dow[note.dow])
+			if int(current_week) % 2 == 1:
+				job.set_command('test $((10#$(/usr/local/bin/gdate +%W)%2)) -eq 1 && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
+			else:
+				job.set_command('test $((10#$(/usr/local/bin/gdate +%W)%2)) -eq 0 && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))
 		elif note.frequency == "Monthly":
 			if note.date == "End of Month":
 				job.set_command('[ "$(/usr/local/bin/gdate +%d -d tomorrow)" = "01" ] && cd {} && export FLASK_APP=app/__init__.py && venv/bin/flask open {} >>app.log 2>&1'.format(cwd, note.url))

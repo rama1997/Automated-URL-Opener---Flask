@@ -3,14 +3,14 @@
 <h1 align="center">Add New Link</h1>
 <form method="POST">
   <label for="title">Title:</label>
-  <input type="text" id="title" name="title" class="form-control">
+  <input type="text" id="title" name="title" class="form-control" required>
   <br />
   <label for="url">URL:</label>
-  <input type="url" id="url" name="url" class="form-control">
+  <input type="url" id="url" name="url" class="form-control" required>
   <br />
   <label for="frequency">Frequency:</label>
-  <select name="frequency" id="frequency">
-    <option value="" disabled selected>Select frequency</option>
+  <select name="frequency" id="frequency" required>
+    <option value="" disabled selected >Select frequency</option>
   </select>
   <div id="dow_div" hidden>
     <label for="dow">Day of the Week:</label>
@@ -18,15 +18,9 @@
       <option value="" disabled selected>Select Day</option>
     </select>
   </div>
-  <div id="month_div" hidden>
-    <label for="month">Month:</label>
-    <select name="month" id="month">
-      <option value="" disabled selected>Select Month</option>
-    </select>
-  </div>
   <div id="date_div" hidden>
     <label for="date">Date:</label>
-    <select name="date" id="date">
+    <select name="date" id="date" >
       <option value="" disabled selected>Select Date</option>
     </select>
   </div>
@@ -48,9 +42,18 @@
     </select>
     <select name="minute" id="minute">
       <option value="00" selected>00</option>
+      <option value="05" >05</option>
+      <option value="10" >10</option>
       <option value="15" >15</option>
+      <option value="20" >20</option>
+      <option value="25" >25</option>
       <option value="30" >30</option>
+      <option value="35" >35</option>
+      <option value="40" >40</option>
       <option value="45" >45</option>
+      <option value="50" >50</option>
+      <option value="55" >55</option>
+      <option value="60" >60</option>
     </select>
     <select name="am_pm" id="am_pm">
       <option value="AM" selected>AM</option>
@@ -65,7 +68,7 @@
 
 
 <script>
-var frequency = ["Daily", "Weekly", "Monthly"]
+var frequency = ["Daily", "Weekly", "Biweekly", "Monthly"]
 var dow = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -73,8 +76,6 @@ window.onload = function() {
   var frequencySel = document.getElementById("frequency");
   var dow_div = document.getElementById("dow_div");
   var dow_Sel = document.getElementById("dow");
-  var month_div = document.getElementById("month_div");
-  var month_Sel = document.getElementById("month");
   var date_div = document.getElementById("date_div");
   var date_Sel = document.getElementById("date");
 
@@ -84,26 +85,30 @@ window.onload = function() {
   frequencySel.onchange = function() {
     //empty other dropdowns
     dow_Sel.length = 1;
-    month_Sel.length = 1;
+    dow_Sel.options[0].selected = true;
     date_Sel.length = 1;
+    date_Sel.options[0].selected = true;
     //display correct values
     if (this.value == "Daily"){
       dow_div.setAttribute("hidden", true);
-      month_div.setAttribute("hidden", true);
       date_div.setAttribute("hidden", true);
+      dow_Sel.removeAttribute("required");
+      date_Sel.removeAttribute("required");
     }
-    else if(this.value == "Weekly"){
+    else if(this.value == "Weekly" || this.value == "Biweekly"){
       dow_div.removeAttribute("hidden");
-      month_div.setAttribute("hidden", true);
       date_div.setAttribute("hidden", true);
+      dow_Sel.setAttribute("required", true);
+      date_Sel.removeAttribute("required");
       for (var i = 0; i < dow.length; i++) {
         dow_Sel.options[dow_Sel.options.length] = new Option(dow[i], dow[i]);
       }
     }
     else if(this.value == "Monthly") {
       dow_div.setAttribute("hidden", true);
-      month_div.setAttribute("hidden", true);
       date_div.removeAttribute("hidden");
+      date_Sel.setAttribute("required", true);
+      dow_Sel.removeAttribute("required");
       date_Sel.options[date_Sel.options.length] = new Option("Start of Month", "Start of Month");
       date_Sel.options[date_Sel.options.length] = new Option("End of Month", "End of Month");
       for (var i = 1; i < 32; i++) {

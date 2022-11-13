@@ -18,12 +18,6 @@
       <option value="" disabled selected>Select Day</option>
     </select>
   </div>
-  <div id="month_div" hidden>
-    <label for="month">Month:</label>
-    <select name="month" id="month">
-      <option value="" disabled selected>Select Month</option>
-    </select>
-  </div>
   <div id="date_div" hidden>
     <label for="date">Date:</label>
     <select name="date" id="date">
@@ -48,9 +42,18 @@
     </select>
     <select name="minute" id="minute">
       <option value="00" selected>00</option>
+      <option value="05" >05</option>
+      <option value="10" >10</option>
       <option value="15" >15</option>
+      <option value="20" >20</option>
+      <option value="25" >25</option>
       <option value="30" >30</option>
+      <option value="35" >35</option>
+      <option value="40" >40</option>
       <option value="45" >45</option>
+      <option value="50" >50</option>
+      <option value="55" >55</option>
+      <option value="60" >60</option>
     </select>
     <select name="am_pm" id="am_pm">
       <option value="AM" selected>AM</option>
@@ -65,15 +68,13 @@
 </form>
 
 <script>
-var frequency = ["Daily", "Weekly", "Monthly"]
+var frequency = ["Daily", "Weekly", "Biweekly", "Monthly"]
 var dow = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 window.onload = function() {
   var frequencySel = document.getElementById("frequency");
   var dow_div = document.getElementById("dow_div");
   var dow_Sel = document.getElementById("dow");
-  var month_div = document.getElementById("month_div");
-  var month_Sel = document.getElementById("month");
   var date_div = document.getElementById("date_div");
   var date_Sel = document.getElementById("date");
   var hour_Sel = document.getElementById("hour");
@@ -88,16 +89,15 @@ window.onload = function() {
   }
   //empty other dropdowns
   dow_Sel.length = 1;
-  month_Sel.length = 1;
+  dow_Sel.options[0].selected = true;
   date_Sel.length = 1;
+  date_Sel.options[0].selected = true;
   //display current values
   if ("{{note.frequency}}" == "Daily"){
       dow_div.setAttribute("hidden", true);
-      month_div.setAttribute("hidden", true);
       date_div.setAttribute("hidden", true);
   }
-  else if("{{note.frequency}}" == "Weekly"){
-    month_div.setAttribute("hidden", true);
+  else if("{{note.frequency}}" == "Weekly" || "{{note.frequency}}" == "Biweekly"){
     dow_div.removeAttribute("hidden");
     date_div.setAttribute("hidden", true);
     for (var i = 0; i < dow.length; i++) {
@@ -108,7 +108,6 @@ window.onload = function() {
     }
   }
   else if("{{note.frequency}}" == "Monthly") {
-    month_div.setAttribute("hidden", true);
     dow_div.setAttribute("hidden", true);
     date_div.removeAttribute("hidden");
     date_Sel.options[date_Sel.options.length] = new Option("Start of Month", "Start of Month");
@@ -150,11 +149,9 @@ window.onload = function() {
     //display correct values
     if (this.value == "Daily"){
       dow_div.setAttribute("hidden", true);
-      month_div.setAttribute("hidden", true);
       date_div.setAttribute("hidden", true);
     }
-    else if(this.value == "Weekly"){
-      month_div.setAttribute("hidden", true);
+    else if(this.value == "Weekly" || this.value == "Biweekly"){
       dow_div.removeAttribute("hidden");
       date_div.setAttribute("hidden", true);
       for (var i = 0; i < dow.length; i++) {
@@ -166,7 +163,6 @@ window.onload = function() {
     }
     else if(this.value == "Monthly") {
       dow_div.setAttribute("hidden", true);
-      month_div.setAttribute("hidden", true);
       date_div.removeAttribute("hidden");
       date_Sel.options[date_Sel.options.length] = new Option("Start of Month", "Start of Month");
       if (date_Sel.options[date_Sel.options.length-1].value == "{{note.date}}"){

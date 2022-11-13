@@ -10,6 +10,7 @@ views = Blueprint('views', __name__)
 
 @views.route('/', methods=['GET'])
 def home():
+	cron.get_jobs()
 	return render_template("home.html", user=current_user)
 
 @views.route('/add_note', methods = ['GET', 'POST'])
@@ -27,6 +28,14 @@ def add_note():
 
 		if len(title) < 1:
 			flash('Title is too short!', category='error')
+		elif len(url) < 1:
+			flash('URL is too short!', category='error')
+		elif frequency == None:
+			flash('Please select frequency!', category='error')
+		elif frequency == "Weekly" and dow == None:
+			flash('Please select day!', category='error')
+		elif frequency == "Monthly" and date == None:
+			flash('Please select date!', category='error')
 		else:
 			new_note = Note(url=url, title=title, frequency = frequency, dow = dow, month = month, date = date, hour = hour, minute = minute, am_pm = am_pm, user_id=current_user.id)
 			db.session.add(new_note)
@@ -58,13 +67,6 @@ def delete_all_notes():
 		db.session.flush()
 		cron.remove(note)
 	db.session.commit()
-	if current_user.email == "admin@gmail.com":
-		notes = Note.query.all()
-		for note in notes:
-			db.session.delete(note)
-			db.session.flush()
-			cron.remove(note)
-		db.session.commit()
 	return jsonify({})
 
 @views.route('/edit_note', methods=['GET', 'POST'])
@@ -84,6 +86,14 @@ def edit_note():
 		if note and note.user_id == current_user.id:
 			if len(title) < 1:
 				flash('Title is too short!', category='error')
+			elif len(url) < 1:
+				flash('URL is too short!', category='error')
+			elif frequency == None:
+				flash('Please select frequency!', category='error')
+			elif frequency == "Weekly" and dow == None:
+				flash('Please select day!', category='error')
+			elif frequency == "Monthly" and date == None:
+				flash('Please select date!', category='error')
 			else:
 				note.url = url
 				note.title = title
@@ -105,10 +115,3 @@ def edit_note():
 		note = Note.query.get(noteId)
 
 	return render_template("edit_note.html", user=current_user, note = note)
-
-@views.route('/record', methods = ['GET'])
-def view_record():
-	notes = Note.query.all()
-	users = User.query.all()
-	cron.get_jobs()
-	return render_template("record.html", user=current_user, users = users, notes = notes)

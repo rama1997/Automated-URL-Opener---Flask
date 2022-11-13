@@ -8,7 +8,7 @@
   <li class="list-group-item">
 	<p>Title: {{ note.title }}</p>
 	<p>Frequency: {{ note.frequency }}</p>
-	{% if note.frequency == "Weekly" %}
+	{% if note.frequency == "Weekly" or note.frequency == "Biweekly" %}
 	<p>Day: {{note.dow}}</p>
 	{% elif note.frequency == "Daily" %}
 	<p>Day: Everyday </p>
