@@ -6,7 +6,7 @@
 <div class="row container-fluid" id="notes">
   {% for note in user.notes %}
   <li class="list-group-item">
-	<p>Title: {{ note.title }}</p>
+	<p><b>{{ note.title }}</b></p>
 	<p>Frequency: {{ note.frequency }}</p>
 	{% if note.frequency == "Weekly" or note.frequency == "Biweekly" %}
 	<p>Day: {{note.dow}}</p>
